@@ -1,7 +1,9 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const secrets = require("../config/secrets");
+const { route } = require("../jokes/jokes-router");
 
+const Users = require("./auth-model");
 const { isValid } = require("./is-valid");
 
 const router = require("express").Router();
@@ -12,8 +14,16 @@ router.post("/register", (req, res) => {
     const rounds = process.env.BCRYPTJS_ROUNDS || 10;
     const hash = bcryptjs.hashSync(credentials.password, rounds);
     credentials.password = hash;
+    Users.add(credentials)
+      .then((user) => {
+        res.status(201).json({ data: user });
+      })
+      .catch((err) => {
+        res.status(500).json({ message: err.message });
+      });
+  } else {
+    res.status(400).json({ message: "username and password required" });
   }
-  res.end("implement register, please!");
 
   /*
     IMPLEMENT
