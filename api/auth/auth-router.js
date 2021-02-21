@@ -4,7 +4,7 @@ const secrets = require("../config/secrets");
 // const { route } = require("../jokes/jokes-router");
 
 const Users = require("./auth-model");
-const { isValid } = require("./is-valid");
+const { isValid, nameAndPassword } = require("./is-valid");
 
 const router = require("express").Router();
 
@@ -16,10 +16,10 @@ router.post("/register", (req, res) => {
     credentials.password = hash;
     Users.add(credentials)
       .then((user) => {
-        res.status(201).json({ data: user });
+        res.status(201).json(user);
       })
       .catch((err) => {
-        res.status(500).json({ message: err.message });
+        res.status(500).json({ message: "username taken" });
       });
   } else {
     res.status(400).json({ message: "username and password required" });
@@ -56,7 +56,8 @@ router.post("/register", (req, res) => {
 router.post("/login", (req, res) => {
   const { username, password } = req.body;
 
-  if (isValid(req.body)) {
+  if (nameAndPassword(req.body)) {
+    console.log(nameAndPassword(req.body));
     Users.findBy({ username: username })
       .then(([user]) => {
         if (user && bcryptjs.compareSync(password, user.password)) {
@@ -71,7 +72,7 @@ router.post("/login", (req, res) => {
         res.status(500).json({ message: err.message });
       });
   } else {
-    res.status(400).json({ message: "please provide username & password" });
+    res.status(400).json({ message: "username and password required" });
   }
 
   function generateToken(user) {
