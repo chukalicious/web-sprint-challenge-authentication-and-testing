@@ -1,10 +1,20 @@
 const bcryptjs = require("bcryptjs");
 const jwt = require("jsonwebtoken");
+const secrets = require("../config/secrets");
+
+const { isValid } = require("./is-valid");
 
 const router = require("express").Router();
 
 router.post("/register", (req, res) => {
+  const credentials = req.body;
+  if (isValid(credentials)) {
+    const rounds = process.env.BCRYPTJS_ROUNDS || 10;
+    const hash = bcryptjs.hashSync(credentials.password, rounds);
+    credentials.password = hash;
+  }
   res.end("implement register, please!");
+
   /*
     IMPLEMENT
     You are welcome to build additional middlewares to help with the endpoint's functionality.
@@ -14,6 +24,8 @@ router.post("/register", (req, res) => {
         "username": "Captain Marvel", // must not exist already in the `users` table
         "password": "foobar"          // needs to be hashed before it's saved
       }
+
+
 
     2- On SUCCESSFUL registration,
       the response body should have `id`, `username` and `password`:
