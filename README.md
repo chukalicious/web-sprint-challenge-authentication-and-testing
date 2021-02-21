@@ -22,7 +22,7 @@ We will hash the user's password using `bcryptjs`, and use JSON Web Tokens and t
 
 ### Task 1: Project Set Up
 
-- [ ] Fork the project and clone it to your machine.
+- [x] Fork the project and clone it to your machine.
 - [ ] Set up your fork settings in Github to submit via Codegrade.
 - [ ] Create a new branch: `git checkout -b <firstName-lastName>`.
 - [ ] Implement the project on your newly created branch, committing changes regularly.
