@@ -2,7 +2,7 @@ const db = require("../../data/dbConfig");
 
 module.exports = {
   add,
-  find,
+  findBy,
 };
 
 function findById(id) {
@@ -14,6 +14,6 @@ async function add(user) {
   return findById(id);
 }
 
-function find() {
-  return db("users");
+function findBy(filter) {
+  return db("users").where(filter).orderBy("id");
 }
