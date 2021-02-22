@@ -31,17 +31,10 @@ describe("Post to the /login tests", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-
-  test("confirms logged in", async () => {
-    const loggedIn = await request(server)
-      .post("api/auth/login")
-      .send({ username: "kat", password: "password" });
-  });
-
   test("returns code", async () => {
     const code = await request(server)
       .post("/api/auth/login")
-      .send({ password: "password", username: "kat" });
+      .send({ username: "Kat", password: "password" });
     expect(code.status).toBe(401);
   });
 });
