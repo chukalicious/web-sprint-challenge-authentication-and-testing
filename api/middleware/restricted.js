@@ -6,15 +6,6 @@ module.exports = (req, res, next) => {
   // const token = req.headers?.authorization?.split(" ")[1];
   console.log(token);
 
-  // try {
-  //   // const token = req.headers.authorization;
-  //   req.token = jwt.verify(token, secret.jwtSecret);
-  //   console.log(req.token);
-  //   next();
-  // } catch (err) {
-  //   res.status(401).json({ message: "token required" });
-  // }
-
   if (token) {
     jwt.verify(token, secret.jwtSecret, (err, decodedToken) => {
       if (err) {
@@ -23,7 +14,7 @@ module.exports = (req, res, next) => {
         req.token = decodedToken;
         // req.authorization = token;
         next();
-        console.log(decodedToken);
+        // console.log(decodedToken);
       }
     });
   } else {

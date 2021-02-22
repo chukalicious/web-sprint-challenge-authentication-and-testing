@@ -19,16 +19,29 @@ describe("Post to /register tests", () => {
     const [user] = await db("users");
     expect(user.username).toBe("kat");
   });
+  test("gives me correct code", async () => {
+    const res = await request(server)
+      .post("/api/auth/register")
+      .send({ password: "password", username: "kat" });
+    expect(res.status).toBe(201);
+  });
 });
 
 describe("Post to the /login tests", () => {
   beforeEach(async () => {
     await db("users").truncate();
   });
-  test("returns token after login", async () => {
-    const res = await request(server)
+
+  test("confirms logged in", async () => {
+    const loggedIn = await request(server)
+      .post("api/auth/login")
+      .send({ username: "kat", password: "password" });
+  });
+
+  test("returns code", async () => {
+    const code = await request(server)
       .post("/api/auth/login")
-      .send({ username: "katiuska", password: "password" });
-    //incomplete
+      .send({ password: "password", username: "kat" });
+    expect(code.status).toBe(401);
   });
 });
